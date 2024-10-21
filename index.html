@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATM Simulation</title>
+    <title>Himanshu ATM</title>
     <style>
-        /* CSS Code */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(to right, #74ebd5, #ACB6E5);
@@ -19,8 +19,9 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 20px;
+            padding: 20px; 
         }
+
         .container {
             background-color: #fff;
             padding: 40px;
@@ -29,47 +30,71 @@
             max-width: 400px;
             text-align: center;
         }
+
         h1, h2 {
             margin-bottom: 20px;
         }
+
         input, select {
-            margin-bottom: 20px;
+            margin-bottom: 20px; 
             padding: 15px;
             width: calc(100% - 30px);
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
+
         button {
-            padding: 12px 25px;
+            padding: 12px 25px; 
             border: none;
             border-radius: 5px;
             background-color: #007bff;
             color: white;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 10px 0; 
             font-size: 16px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s; 
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .hidden {
             display: none;
         }
+
         .menu {
             margin: 20px 0;
         }
+
         .form-container {
             text-align: left;
         }
+
         .error {
             color: red;
             font-size: 14px;
         }
+
         .success {
             color: green;
             font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 100%;
+            }
+
+            input, select {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -79,6 +104,28 @@
         <div id="mainMenu" class="menu">
             <button onclick="showCreateAccount()">Create New Account</button>
             <button onclick="showLogin()">Login</button>
+            <button onclick="showPasswordRecovery()">Forgot Password?</button>
+        </div>
+
+        <div id="createAccountForm" class="form-container hidden">
+            <h2>Create Account</h2>
+            <label for="newUserId">User ID:</label>
+            <input type="text" id="newUserId" placeholder="Enter user id" required>
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" placeholder="Enter password" required>
+            <div id="passwordError" class="error hidden"></div>
+            <label for="securityQuestion">Security Question:</label>
+            <select id="securityQuestion">
+                <option value="" disabled selected>Select a security question</option>
+                <option value="pet">What is the name of your first pet?</option>
+                <option value="mother">What is your mother's maiden name?</option>
+                <option value="city">What city were you born in?</option>
+            </select>
+            <label for="securityAnswer">Answer:</label>
+            <input type="text" id="securityAnswer" placeholder="Answer" required>
+            <button onclick="createAccount()">Create Account</button>
+            <button onclick="backToMain()">Back to Menu</button>
+            <div id="accountError" class="error hidden"></div>
         </div>
 
         <div id="loginForm" class="form-container hidden">
@@ -92,24 +139,13 @@
             <div id="loginError" class="error hidden"></div>
         </div>
 
-        <div id="createAccountForm" class="form-container hidden">
-            <h2>Create Account</h2>
-            <label for="newUserId">User ID:</label>
-            <input type="text" id="newUserId" placeholder="Choose a user id" required>
-            <label for="newPassword">Password:</label>
-            <input type="password" id="newPassword" placeholder="Choose a password" required>
-            <button onclick="createAccount()">Create Account</button>
-            <button onclick="backToMain()">Back to Menu</button>
-            <div id="createAccountError" class="error hidden"></div>
-            <div id="createAccountSuccess" class="success hidden"></div>
-        </div>
-
         <div id="accountMenu" class="menu hidden">
             <h2>Your Profile</h2>
             <p id="userIdDisplay"></p>
             <p id="balanceDisplay">Balance: 💰<span id="balanceAmount">0.00</span></p>
             <button onclick="showDeposit()">Deposit Money</button>
             <button onclick="showWithdraw()">Withdraw Money</button>
+            <button onclick="showTransactionHistory()">Transaction History</button>
             <button onclick="logout()">Logout</button>
         </div>
 
@@ -117,7 +153,7 @@
             <h2>Deposit Money</h2>
             <label for="depositAmount">Amount:</label>
             <input type="number" id="depositAmount" placeholder="Enter amount"><br>
-            <button onclick="deposit()">Deposit</button>
+            <button onclick="confirmDeposit()">Deposit</button>
             <button onclick="backToAccountMenu()">Back to Account Menu</button>
             <div id="depositError" class="error hidden"></div>
         </div>
@@ -126,19 +162,35 @@
             <h2>Withdraw Money</h2>
             <label for="withdrawAmount">Amount:</label>
             <input type="number" id="withdrawAmount" placeholder="Enter amount"><br>
-            <button onclick="withdraw()">Withdraw</button>
+            <button onclick="confirmWithdraw()">Withdraw</button>
             <button onclick="backToAccountMenu()">Back to Account Menu</button>
             <div id="withdrawError" class="error hidden"></div>
         </div>
 
+        <div id="transactionHistory" class="form-container hidden">
+            <h2>Transaction History</h2>
+            <ul id="transactionList"></ul>
+            <button onclick="backToAccountMenu()">Back to Account Menu</button>
+        </div>
+
+        <div id="passwordRecoveryForm" class="form-container hidden">
+            <h2>Password Recovery</h2>
+            <label for="recoverUserId">User ID:</label>
+            <input type="text" id="recoverUserId" placeholder="Enter user id" required>
+            <label for="recoverAnswer">Answer:</label>
+            <input type="text" id="recoverAnswer" placeholder="Answer" required>
+            <button onclick="recoverPassword()">Recover Password</button>
+            <button onclick="backToMain()">Back to Menu</button>
+            <div id="recoveryError" class="error hidden"></div>
+            <div id="recoverySuccess" class="success hidden"></div>
+        </div>
     </div>
 
     <script>
-        // Data structure to hold account information
-        let accounts = [];
-        let currentAccountIndex = null;
+        let accounts = []; // Store multiple accounts
+        let currentAccountIndex = null; // Track current account for session timeout
+        let loginAttempts = 0; // Track login attempts for security
 
-        // Show forms or menus
         function showCreateAccount() {
             hideAll();
             document.getElementById("createAccountForm").classList.remove("hidden");
@@ -149,109 +201,157 @@
             document.getElementById("loginForm").classList.remove("hidden");
         }
 
+        function showPasswordRecovery() {
+            hideAll();
+            document.getElementById("passwordRecoveryForm").classList.remove("hidden");
+        }
+
         function createAccount() {
             const userId = document.getElementById("newUserId").value;
             const password = document.getElementById("newPassword").value;
-            const createAccountError = document.getElementById("createAccountError");
-            const createAccountSuccess = document.getElementById("createAccountSuccess");
+            const securityQuestion = document.getElementById("securityQuestion").value;
+            const securityAnswer = document.getElementById("securityAnswer").value;
 
-            // Reset messages
-            createAccountError.classList.add("hidden");
-            createAccountSuccess.classList.add("hidden");
-
-            // Check if userId already exists
-            if (accounts.some(account => account.userId === userId)) {
-                createAccountError.innerText = "User ID already exists. Please choose another one.";
-                createAccountError.classList.remove("hidden");
+            // Password validation
+            const passwordError = document.getElementById("passwordError");
+            passwordError.classList.add("hidden");
+            if (password.length < 8 || !/\d/.test(password) || !/[!@#$%^&*]/.test(password)) {
+                passwordError.innerText = "Password must be at least 8 characters long and include a number and a special character.";
+                passwordError.classList.remove("hidden");
                 return;
             }
 
-            // Create new account
-            accounts.push({ userId, password, balance: 0 });
-            createAccountSuccess.innerText = "Account created successfully!";
-            createAccountSuccess.classList.remove("hidden");
+            // Check if user ID already exists
+            const existingAccount = accounts.find(acc => acc.userId === userId);
+            const accountError = document.getElementById("accountError");
+            accountError.classList.add("hidden");
+            if (existingAccount) {
+                accountError.innerText = "An account with this user ID already exists.";
+                accountError.classList.remove("hidden");
+                return;
+            }
 
-            // Clear inputs
-            document.getElementById("newUserId").value = '';
-            document.getElementById("newPassword").value = '';
+            // Create new account with hashed password (simulated)
+            const newAccount = {
+                userId: userId,
+                password: btoa(password), // Simulated password hashing
+                balance: 0,
+                securityQuestion: securityQuestion,
+                securityAnswer: securityAnswer,
+                transactionHistory: []
+            };
+            accounts.push(newAccount);
+            alert("Account created successfully!");
+            backToMain();
         }
 
         function login() {
             const userId = document.getElementById("userId").value;
             const password = document.getElementById("password").value;
+
+            // Check for the account
+            const account = accounts.find(acc => acc.userId === userId && acc.password === btoa(password));
             const loginError = document.getElementById("loginError");
-
-            // Reset error message
             loginError.classList.add("hidden");
-
-            const account = accounts.find(acc => acc.userId === userId && acc.password === password);
             if (account) {
-                currentAccountIndex = accounts.indexOf(account);
+                alert("Login successful!");
+                currentAccountIndex = accounts.indexOf(account); // Track current account
                 document.getElementById("userIdDisplay").innerText = `User ID: ${account.userId}`;
                 document.getElementById("balanceAmount").innerText = account.balance.toFixed(2);
                 showAccountMenu();
+                resetSessionTimeout();
+                loginAttempts = 0; // Reset login attempts on successful login
             } else {
+                loginAttempts++;
+                if (loginAttempts >= 3) {
+                    alert("Account locked due to multiple failed login attempts. Please try again later.");
+                    return; // Simulate account lockout
+                }
                 loginError.innerText = "Login failed. Please check your credentials.";
                 loginError.classList.remove("hidden");
             }
         }
 
-        function deposit() {
+        function confirmDeposit() {
             const amount = parseFloat(document.getElementById("depositAmount").value);
             const depositError = document.getElementById("depositError");
             depositError.classList.add("hidden");
 
             if (amount > 0) {
-                accounts[currentAccountIndex].balance += amount;
-                alert(`$${amount.toFixed(2)} deposited!`);
-                document.getElementById("balanceAmount").innerText = accounts[currentAccountIndex].balance.toFixed(2);
-                backToAccountMenu();
+                if (confirm(`Are you sure you want to deposit $${amount.toFixed(2)}?`)) {
+                    accounts[currentAccountIndex].balance += amount;
+                    accounts[currentAccountIndex].transactionHistory.push(`Deposited: $${amount.toFixed(2)}`);
+                    alert(`$${amount.toFixed(2)} deposited!`);
+                    backToAccountMenu();
+                }
             } else {
                 depositError.innerText = "Invalid deposit amount.";
                 depositError.classList.remove("hidden");
             }
         }
 
-        function withdraw() {
+        function confirmWithdraw() {
             const amount = parseFloat(document.getElementById("withdrawAmount").value);
             const withdrawError = document.getElementById("withdrawError");
             withdrawError.classList.add("hidden");
 
             if (amount > 0 && amount <= accounts[currentAccountIndex].balance) {
-                accounts[currentAccountIndex].balance -= amount;
-                alert(`$${amount.toFixed(2)} withdrawn!`);
-                document.getElementById("balanceAmount").innerText = accounts[currentAccountIndex].balance.toFixed(2);
-                backToAccountMenu();
+                if (confirm(`Are you sure you want to withdraw $${amount.toFixed(2)}?`)) {
+                    accounts[currentAccountIndex].balance -= amount;
+                    accounts[currentAccountIndex].transactionHistory.push(`Withdrew: $${amount.toFixed(2)}`);
+                    alert(`$${amount.toFixed(2)} withdrawn!`);
+                    backToAccountMenu();
+                }
             } else {
                 withdrawError.innerText = "Invalid or insufficient balance for withdrawal.";
                 withdrawError.classList.remove("hidden");
             }
         }
 
+        function showTransactionHistory() {
+            hideAll();
+            document.getElementById("transactionHistory").classList.remove("hidden");
+            const transactionList = document.getElementById("transactionList");
+            transactionList.innerHTML = ''; // Clear previous history
+            accounts[currentAccountIndex].transactionHistory.forEach(transaction => {
+                const li = document.createElement("li");
+                li.innerText = transaction;
+                transactionList.appendChild(li);
+            });
+        }
+
+        function recoverPassword() {
+            const userId = document.getElementById("recoverUserId").value;
+            const answer = document.getElementById("recoverAnswer").value;
+            const recoveryError = document.getElementById("recoveryError");
+            const recoverySuccess = document.getElementById("recoverySuccess");
+            recoveryError.classList.add("hidden");
+            recoverySuccess.classList.add("hidden");
+
+            const account = accounts.find(acc => acc.userId === userId);
+            if (!account) {
+                recoveryError.innerText = "User ID not found.";
+                recoveryError.classList.remove("hidden");
+                return;
+            }
+
+            if (account.securityAnswer === answer) {
+                recoverySuccess.innerText = `Your password is: ${atob(account.password)}`; // Show original password (not secure in production)
+                recoverySuccess.classList.remove("hidden");
+            } else {
+                recoveryError.innerText = "Incorrect answer to the security question.";
+                recoveryError.classList.remove("hidden");
+            }
+        }
+
         function logout() {
-            currentAccountIndex = null;
+            currentAccountIndex = null; // Clear current account on logout
             backToMain();
         }
 
-        // Helper functions to show/hide menus and forms
         function backToMain() {
             hideAll();
             document.getElementById("mainMenu").classList.remove("hidden");
-        }
-
-        function showAccountMenu() {
-            hideAll();
-            document.getElementById("accountMenu").classList.remove("hidden");
-        }
-
-        function showDeposit() {
-            hideAll();
-            document.getElementById("depositForm").classList.remove("hidden");
-        }
-
-        function showWithdraw() {
-            hideAll();
-            document.getElementById("withdrawForm").classList.remove("hidden");
         }
 
         function backToAccountMenu() {
@@ -260,13 +360,23 @@
         }
 
         function hideAll() {
-            document.getElementById("mainMenu").classList.add("hidden");
-            document.getElementById("loginForm").classList.add("hidden");
-            document.getElementById("createAccountForm").classList.add("hidden");
-            document.getElementById("accountMenu").classList.add("hidden");
-            document.getElementById("depositForm").classList.add("hidden");
-            document.getElementById("withdrawForm").classList.add("hidden");
+            const forms = document.querySelectorAll(".form-container, .menu");
+            forms.forEach(form => form.classList.add("hidden"));
         }
+
+        // Session management
+        let sessionTimeout;
+        const TIMEOUT_DURATION = 300000; // 5 minutes
+
+        function resetSessionTimeout() {
+            clearTimeout(sessionTimeout);
+            sessionTimeout = setTimeout(logout, TIMEOUT_DURATION);
+        }
+
+        // Add event listeners for input fields to reset session
+        document.querySelectorAll("input").forEach(input => {
+            input.addEventListener("input", resetSessionTimeout);
+        });
     </script>
 </body>
 </html>
