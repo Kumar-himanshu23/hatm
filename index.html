@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Himanshu ATM</title>
+   <style>
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #74ebd5, #ACB6E5);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px; 
+}
+
+.container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    text-align: center;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+input {
+    margin-bottom: 20px; 
+    padding: 15px;
+    width: calc(100% - 30px);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 25px; 
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin: 10px 0; 
+    font-size: 16px;
+    transition: background-color 0.3s; 
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.hidden {
+    display: none;
+}
+
+.menu {
+    margin: 20px 0;
+}
+
+.form-container {
+    text-align: left;
+}
+
+   </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Himanshu ATM</h1>
+        <div id="mainMenu" class="menu">
+            <button onclick="showCreateAccount()">Create New Account</button>
+            <button onclick="showLogin()">Login</button>
+        </div>
+
+        <div id="createAccountForm" class="form-container hidden">
+            <h2>Create Account</h2>
+            <label for="newUserId">User ID:</label>
+            <input type="text" id="newUserId" placeholder="Enter user id" required><br>
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" placeholder="Enter password" required><br>
+            <button onclick="createAccount()">Create Account</button>
+            <button onclick="backToMain()">Back to Menu</button>
+        </div>
+
+        
+        <div id="loginForm" class="form-container hidden">
+            <h2>Login</h2>
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId" placeholder="Enter user id" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter password" required><br>
+            <button onclick="login()">Login</button>
+            <button onclick="backToMain()">Back to Menu</button>
+        </div>
+
+       
+        <div id="accountMenu" class="menu hidden">
+            <button onclick="showDeposit()">Deposit Money</button>
+            <button onclick="showWithdraw()">Withdraw Money</button>
+            <button onclick="requestBalance()">Request Balance</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+       
+        <div id="depositForm" class="form-container hidden">
+            <h2>Deposit Money</h2>
+            <label for="depositAmount">Amount:</label>
+            <input type="number" id="depositAmount" placeholder="Enter amount"><br>
+            <button onclick="deposit()">Deposit</button>
+            <button onclick="backToAccountMenu()">Back to Account Menu</button>
+        </div>
+
+        <div id="withdrawForm" class="form-container hidden">
+            <h2>Withdraw Money</h2>
+            <label for="withdrawAmount">Amount:</label>
+            <input type="number" id="withdrawAmount" placeholder="Enter amount"><br>
+            <button onclick="withdraw()">Withdraw</button>
+            <button onclick="backToAccountMenu()">Back to Account Menu</button>
+        </div>
+
+       
+        <div id="balanceDisplay" class="form-container hidden">
+            <h2>Your Balance</h2>
+            <p id="balanceAmount">💰0.00</p>
+            <button onclick="backToAccountMenu()">Back to Account Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let account = {
+    userId: "",
+    password: "",
+    balance: 0.0
+};
+
+function showCreateAccount() {
+    hideAll();
+    document.getElementById("createAccountForm").classList.remove("hidden");
+}
+
+function showLogin() {
+    hideAll();
+    document.getElementById("loginForm").classList.remove("hidden");
+}
+
+function createAccount() {
+    const userId = document.getElementById("newUserId").value;
+    const password = document.getElementById("newPassword").value;
+
+    if (userId && password && !account.userId) {
+        account.userId = userId;
+        account.password = password;
+        account.balance = 0;
+        alert("Account created successfully!");
+        backToMain();
+    } else if (account.userId) {
+        alert("An account already exists.");
+    } else {
+        alert("Please fill in all fields.");
+    }
+}
+
+function login() {
+    const userId = document.getElementById("userId").value;
+    const password = document.getElementById("password").value;
+
+    if (userId === account.userId && password === account.password) {
+        alert("Login successful!");
+        showAccountMenu();
+    } else {
+        alert("Login failed. Please check your credentials.");
+    }
+}
+
+function showAccountMenu() {
+    hideAll();
+    document.getElementById("accountMenu").classList.remove("hidden");
+}
+
+function showDeposit() {
+    hideAll();
+    document.getElementById("depositForm").classList.remove("hidden");
+}
+
+function deposit() {
+    const amount = parseFloat(document.getElementById("depositAmount").value);
+    if (amount > 0) {
+        account.balance += amount;
+        alert(`$${amount} deposited!`);
+        backToAccountMenu();
+    } else {
+        alert("Invalid deposit amount.");
+    }
+}
+
+function showWithdraw() {
+    hideAll();
+    document.getElementById("withdrawForm").classList.remove("hidden");
+}
+
+function withdraw() {
+    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    if (amount > 0 && amount <= account.balance) {
+        account.balance -= amount;
+        alert(`$${amount} withdrawn!`);
+        backToAccountMenu();
+    } else {
+        alert("Invalid or insufficient balance for withdrawal.");
+    }
+}
+
+function requestBalance() {
+    hideAll();
+    document.getElementById("balanceDisplay").classList.remove("hidden");
+    document.getElementById("balanceAmount").innerText = `$${account.balance.toFixed(2)}`;
+}
+
+function logout() {
+    backToMain();
+}
+
+function backToMain() {
+    hideAll();
+    document.getElementById("mainMenu").classList.remove("hidden");
+}
+
+function backToAccountMenu() {
+    hideAll();
+    document.getElementById("accountMenu").classList.remove("hidden");
+}
+
+function hideAll() {
+    const forms = document.querySelectorAll(".form-container, .menu");
+    forms.forEach(form => form.classList.add("hidden"));
+}
+
+    </script>
+</body>
+</html>
