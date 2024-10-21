@@ -3,76 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Himanshu ATM</title>
-   <style>
-   * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #74ebd5, #ACB6E5);
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px; 
-}
-
-.container {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    text-align: center;
-}
-
-h1, h2 {
-    margin-bottom: 20px;
-}
-
-input {
-    margin-bottom: 20px; 
-    padding: 15px;
-    width: calc(100% - 30px);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-button {
-    padding: 12px 25px; 
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    margin: 10px 0; 
-    font-size: 16px;
-    transition: background-color 0.3s; 
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.hidden {
-    display: none;
-}
-
-.menu {
-    margin: 20px 0;
-}
-
-.form-container {
-    text-align: left;
-}
-
-   </style>
+    <title>ATM Simulation</title>
+    <style>
+        /* CSS Code */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            text-align: center;
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+        input, select {
+            margin-bottom: 20px;
+            padding: 15px;
+            width: calc(100% - 30px);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        .menu {
+            margin: 20px 0;
+        }
+        .form-container {
+            text-align: left;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -82,42 +81,45 @@ button:hover {
             <button onclick="showLogin()">Login</button>
         </div>
 
-        <div id="createAccountForm" class="form-container hidden">
-            <h2>Create Account</h2>
-            <label for="newUserId">User ID:</label>
-            <input type="text" id="newUserId" placeholder="Enter user id" required><br>
-            <label for="newPassword">Password:</label>
-            <input type="password" id="newPassword" placeholder="Enter password" required><br>
-            <button onclick="createAccount()">Create Account</button>
-            <button onclick="backToMain()">Back to Menu</button>
-        </div>
-
-        
         <div id="loginForm" class="form-container hidden">
             <h2>Login</h2>
             <label for="userId">User ID:</label>
-            <input type="text" id="userId" placeholder="Enter user id" required><br>
+            <input type="text" id="userId" placeholder="Enter user id" required>
             <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter password" required><br>
+            <input type="password" id="password" placeholder="Enter password" required>
             <button onclick="login()">Login</button>
             <button onclick="backToMain()">Back to Menu</button>
+            <div id="loginError" class="error hidden"></div>
         </div>
 
-       
+        <div id="createAccountForm" class="form-container hidden">
+            <h2>Create Account</h2>
+            <label for="newUserId">User ID:</label>
+            <input type="text" id="newUserId" placeholder="Choose a user id" required>
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" placeholder="Choose a password" required>
+            <button onclick="createAccount()">Create Account</button>
+            <button onclick="backToMain()">Back to Menu</button>
+            <div id="createAccountError" class="error hidden"></div>
+            <div id="createAccountSuccess" class="success hidden"></div>
+        </div>
+
         <div id="accountMenu" class="menu hidden">
+            <h2>Your Profile</h2>
+            <p id="userIdDisplay"></p>
+            <p id="balanceDisplay">Balance: 💰<span id="balanceAmount">0.00</span></p>
             <button onclick="showDeposit()">Deposit Money</button>
             <button onclick="showWithdraw()">Withdraw Money</button>
-            <button onclick="requestBalance()">Request Balance</button>
             <button onclick="logout()">Logout</button>
         </div>
 
-       
         <div id="depositForm" class="form-container hidden">
             <h2>Deposit Money</h2>
             <label for="depositAmount">Amount:</label>
             <input type="number" id="depositAmount" placeholder="Enter amount"><br>
             <button onclick="deposit()">Deposit</button>
             <button onclick="backToAccountMenu()">Back to Account Menu</button>
+            <div id="depositError" class="error hidden"></div>
         </div>
 
         <div id="withdrawForm" class="form-container hidden">
@@ -126,124 +128,145 @@ button:hover {
             <input type="number" id="withdrawAmount" placeholder="Enter amount"><br>
             <button onclick="withdraw()">Withdraw</button>
             <button onclick="backToAccountMenu()">Back to Account Menu</button>
+            <div id="withdrawError" class="error hidden"></div>
         </div>
 
-       
-        <div id="balanceDisplay" class="form-container hidden">
-            <h2>Your Balance</h2>
-            <p id="balanceAmount">💰0.00</p>
-            <button onclick="backToAccountMenu()">Back to Account Menu</button>
-        </div>
     </div>
 
     <script>
-        let account = {
-    userId: "",
-    password: "",
-    balance: 0.0
-};
+        // Data structure to hold account information
+        let accounts = [];
+        let currentAccountIndex = null;
 
-function showCreateAccount() {
-    hideAll();
-    document.getElementById("createAccountForm").classList.remove("hidden");
-}
+        // Show forms or menus
+        function showCreateAccount() {
+            hideAll();
+            document.getElementById("createAccountForm").classList.remove("hidden");
+        }
 
-function showLogin() {
-    hideAll();
-    document.getElementById("loginForm").classList.remove("hidden");
-}
+        function showLogin() {
+            hideAll();
+            document.getElementById("loginForm").classList.remove("hidden");
+        }
 
-function createAccount() {
-    const userId = document.getElementById("newUserId").value;
-    const password = document.getElementById("newPassword").value;
+        function createAccount() {
+            const userId = document.getElementById("newUserId").value;
+            const password = document.getElementById("newPassword").value;
+            const createAccountError = document.getElementById("createAccountError");
+            const createAccountSuccess = document.getElementById("createAccountSuccess");
 
-    if (userId && password && !account.userId) {
-        account.userId = userId;
-        account.password = password;
-        account.balance = 0;
-        alert("Account created successfully!");
-        backToMain();
-    } else if (account.userId) {
-        alert("An account already exists.");
-    } else {
-        alert("Please fill in all fields.");
-    }
-}
+            // Reset messages
+            createAccountError.classList.add("hidden");
+            createAccountSuccess.classList.add("hidden");
 
-function login() {
-    const userId = document.getElementById("userId").value;
-    const password = document.getElementById("password").value;
+            // Check if userId already exists
+            if (accounts.some(account => account.userId === userId)) {
+                createAccountError.innerText = "User ID already exists. Please choose another one.";
+                createAccountError.classList.remove("hidden");
+                return;
+            }
 
-    if (userId === account.userId && password === account.password) {
-        alert("Login successful!");
-        showAccountMenu();
-    } else {
-        alert("Login failed. Please check your credentials.");
-    }
-}
+            // Create new account
+            accounts.push({ userId, password, balance: 0 });
+            createAccountSuccess.innerText = "Account created successfully!";
+            createAccountSuccess.classList.remove("hidden");
 
-function showAccountMenu() {
-    hideAll();
-    document.getElementById("accountMenu").classList.remove("hidden");
-}
+            // Clear inputs
+            document.getElementById("newUserId").value = '';
+            document.getElementById("newPassword").value = '';
+        }
 
-function showDeposit() {
-    hideAll();
-    document.getElementById("depositForm").classList.remove("hidden");
-}
+        function login() {
+            const userId = document.getElementById("userId").value;
+            const password = document.getElementById("password").value;
+            const loginError = document.getElementById("loginError");
 
-function deposit() {
-    const amount = parseFloat(document.getElementById("depositAmount").value);
-    if (amount > 0) {
-        account.balance += amount;
-        alert(`$${amount} deposited!`);
-        backToAccountMenu();
-    } else {
-        alert("Invalid deposit amount.");
-    }
-}
+            // Reset error message
+            loginError.classList.add("hidden");
 
-function showWithdraw() {
-    hideAll();
-    document.getElementById("withdrawForm").classList.remove("hidden");
-}
+            const account = accounts.find(acc => acc.userId === userId && acc.password === password);
+            if (account) {
+                currentAccountIndex = accounts.indexOf(account);
+                document.getElementById("userIdDisplay").innerText = `User ID: ${account.userId}`;
+                document.getElementById("balanceAmount").innerText = account.balance.toFixed(2);
+                showAccountMenu();
+            } else {
+                loginError.innerText = "Login failed. Please check your credentials.";
+                loginError.classList.remove("hidden");
+            }
+        }
 
-function withdraw() {
-    const amount = parseFloat(document.getElementById("withdrawAmount").value);
-    if (amount > 0 && amount <= account.balance) {
-        account.balance -= amount;
-        alert(`$${amount} withdrawn!`);
-        backToAccountMenu();
-    } else {
-        alert("Invalid or insufficient balance for withdrawal.");
-    }
-}
+        function deposit() {
+            const amount = parseFloat(document.getElementById("depositAmount").value);
+            const depositError = document.getElementById("depositError");
+            depositError.classList.add("hidden");
 
-function requestBalance() {
-    hideAll();
-    document.getElementById("balanceDisplay").classList.remove("hidden");
-    document.getElementById("balanceAmount").innerText = `$${account.balance.toFixed(2)}`;
-}
+            if (amount > 0) {
+                accounts[currentAccountIndex].balance += amount;
+                alert(`$${amount.toFixed(2)} deposited!`);
+                document.getElementById("balanceAmount").innerText = accounts[currentAccountIndex].balance.toFixed(2);
+                backToAccountMenu();
+            } else {
+                depositError.innerText = "Invalid deposit amount.";
+                depositError.classList.remove("hidden");
+            }
+        }
 
-function logout() {
-    backToMain();
-}
+        function withdraw() {
+            const amount = parseFloat(document.getElementById("withdrawAmount").value);
+            const withdrawError = document.getElementById("withdrawError");
+            withdrawError.classList.add("hidden");
 
-function backToMain() {
-    hideAll();
-    document.getElementById("mainMenu").classList.remove("hidden");
-}
+            if (amount > 0 && amount <= accounts[currentAccountIndex].balance) {
+                accounts[currentAccountIndex].balance -= amount;
+                alert(`$${amount.toFixed(2)} withdrawn!`);
+                document.getElementById("balanceAmount").innerText = accounts[currentAccountIndex].balance.toFixed(2);
+                backToAccountMenu();
+            } else {
+                withdrawError.innerText = "Invalid or insufficient balance for withdrawal.";
+                withdrawError.classList.remove("hidden");
+            }
+        }
 
-function backToAccountMenu() {
-    hideAll();
-    document.getElementById("accountMenu").classList.remove("hidden");
-}
+        function logout() {
+            currentAccountIndex = null;
+            backToMain();
+        }
 
-function hideAll() {
-    const forms = document.querySelectorAll(".form-container, .menu");
-    forms.forEach(form => form.classList.add("hidden"));
-}
+        // Helper functions to show/hide menus and forms
+        function backToMain() {
+            hideAll();
+            document.getElementById("mainMenu").classList.remove("hidden");
+        }
 
+        function showAccountMenu() {
+            hideAll();
+            document.getElementById("accountMenu").classList.remove("hidden");
+        }
+
+        function showDeposit() {
+            hideAll();
+            document.getElementById("depositForm").classList.remove("hidden");
+        }
+
+        function showWithdraw() {
+            hideAll();
+            document.getElementById("withdrawForm").classList.remove("hidden");
+        }
+
+        function backToAccountMenu() {
+            hideAll();
+            document.getElementById("accountMenu").classList.remove("hidden");
+        }
+
+        function hideAll() {
+            document.getElementById("mainMenu").classList.add("hidden");
+            document.getElementById("loginForm").classList.add("hidden");
+            document.getElementById("createAccountForm").classList.add("hidden");
+            document.getElementById("accountMenu").classList.add("hidden");
+            document.getElementById("depositForm").classList.add("hidden");
+            document.getElementById("withdrawForm").classList.add("hidden");
+        }
     </script>
 </body>
 </html>
